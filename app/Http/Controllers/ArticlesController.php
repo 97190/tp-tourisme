@@ -35,15 +35,20 @@ class ArticlesController extends Controller
         $articlesValidation = $request->validate([
             "title" => ["required", "string", "max:100"],
             "body" => ["required", "string", "max:500"],
-            "user_id" => ["required", "numeric"]
-            //"photoArticle"=> ["required", "string"],
+            "image_path"=> ["required", "mimes:png,jpeg,jpg", "max:4096"],
+            "user_id" => ["required", "numeric"],
         ]);
+
+/* Enregistre l'image dans le dossier public/images */ 
+        $path = $request->file("image_path")->store("public/images");
 
         $articles = Articles::create([
             "title" => $articlesValidation["title"],
             "body" => $articlesValidation["body"],
+            "image_path" => $path,
             "user_id" => $articlesValidation["user_id"],
-            //"photoArticle"=> ["required", "string"],
+            
+            
         ]);
         return response(["Article ajouté"], 201);
     }
