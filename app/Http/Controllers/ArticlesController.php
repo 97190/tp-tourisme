@@ -18,7 +18,7 @@ class ArticlesController extends Controller
     {
         $articles = Articles::all();
         return $articles;
-        if (count($articles) == -0) {
+        if (count($articles) <= 0) {
             return response(["message" => "Aucun n'article de disponible"], 204);
         }
         return response($articles, 200);
@@ -33,7 +33,7 @@ class ArticlesController extends Controller
     public function store(Request $request)
     {
         $articlesValidation = $request->validate([
-            "title" => ["required", "string"],
+            "title" => ["required", "string", "max:100"],
             "body" => ["required", "string", "max:500"],
             "user_id" => ["required", "numeric"]
             //"photoArticle"=> ["required", "string"],
@@ -75,7 +75,7 @@ class ArticlesController extends Controller
     public function update(Request $request, $id)
     {
         $articlesValidation = $request->validate([
-            "title" => ["string"],
+            "title" => ["string", "max:100"],
             "body" => ["string", "max:500"],
             "user_id" => ["required", "numeric"],
             //"photoArticle"=> ["required", "string"],
@@ -85,9 +85,15 @@ class ArticlesController extends Controller
         if (!$articles) {
             return response(["message" => "Pas d'article trouvé avec cet id $id"], 404);
         }
-        if (!$articles->user_id ===  $articlesValidation["user_id"]) {
+        if ($articles->user_id !=  $articlesValidation["user_id"]) {
             return response(["message" => "Action interdite"], 403);
         }
+        $articles->update([
+            'title' => $request->title,
+            'body' => $request->body,
+            'user_id' => $request->user_id,
+        ]);
+        return response(["message" => "Article mis à jour"], 201);
     }
     /**
      * Remove the specified resource from storage.
@@ -95,8 +101,22 @@ class ArticlesController extends Controller
      * @param  \App\Models\Articles  $articles
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Articles $articles)
+    public function destroy(Request $request, $id)
     {
-        //
+        $articlesValidation = $request->validate([
+            "user_id" => ["required", "numeric"],
+        ]);
+        $articles = Articles::find($id);
+        if (!$articles) {
+            return response(["message" => "Pas d'article trouvé avec cet id $id"], 404);
+        }
+        if ($articles->user_id !=  $articlesValidation["user_id"]) {
+            return response(["message" => "Action interdite"], 403);
+        }
+        $value = Articles::destroy($id);
+        if (boolval($value) === false) {
+            return response(["message" => "Aucun article trouvé avec cet id $id"], 404);
+        }
+        return response(["message" => "Article supprimé"], 202);
     }
 }
