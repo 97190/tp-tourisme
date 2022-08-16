@@ -16,12 +16,21 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        $articles = Articles::all();
-        return $articles;
-        if (count($articles) <= 0) {
-            return response(["message" => "Aucun n'article de disponible"], 204);
-        }
-        return response($articles, 200);
+        $articles = DB::table("articles")
+        ->join("themes", "themes.id", '=', "articles.theme_id")
+        ->get()
+        ->toArray();
+
+        return response()->json([
+            'status' => "Succès",
+            "data" => $articles,
+        ]);
+        // $articles = Articles::all();
+        // return $articles;
+        // if (count($articles) <= 0) {
+        //     return response(["message" => "Aucun n'article de disponible"], 204);
+        // }
+        // return response($articles, 200);
     }
 
     /**
@@ -47,6 +56,7 @@ class ArticlesController extends Controller
             "body" => $articlesValidation["body"],
             "image_path" => $path,
             "user_id" => $articlesValidation["user_id"],
+            "theme_id" => $request->theme_id,
             
             
         ]);
@@ -97,6 +107,7 @@ class ArticlesController extends Controller
             'title' => $request->title,
             'body' => $request->body,
             'user_id' => $request->user_id,
+            'theme_id' => $request->theme_id,
         ]);
         return response(["message" => "Article mis à jour"], 201);
     }
