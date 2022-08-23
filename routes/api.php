@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\LoisirController;
 use App\Http\Controllers\ArticlesController;
+use App\Http\Controllers\LieuxController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +33,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::apiResource("themes", ThemeController::class); 
 Route::apiResource("loisirs", LoisirController::class); 
+Route::apiResource("lieux", LieuxController::class); 
 
