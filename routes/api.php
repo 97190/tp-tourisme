@@ -33,5 +33,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::apiResource("themes", ThemeController::class); 
 Route::apiResource("loisirs", LoisirController::class); 
-Route::apiResource("lieux", LieuxController::class); 
+
 
