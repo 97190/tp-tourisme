@@ -17,7 +17,7 @@ class ArticlesController extends Controller
     public function index()
     {
         $articles = DB::table("articles")
-        ->join("themes", "themes.id", '=', "articles.theme_id")
+        ->join("themes", "themes.id", '=', "articles.theme_id", "loisirs", "loisirs.id", '=', "articles.loisir_id")
         ->get()
         ->toArray();
 
@@ -57,6 +57,7 @@ class ArticlesController extends Controller
             "image_path" => $path,
             "user_id" => $articlesValidation["user_id"],
             "theme_id" => $request->theme_id,
+            "loisir_id" => $request->loisir_id,
             
             
         ]);
@@ -108,6 +109,7 @@ class ArticlesController extends Controller
             'body' => $request->body,
             'user_id' => $request->user_id,
             'theme_id' => $request->theme_id,
+            'loisir_id' => $request->loisir_id,
         ]);
         return response(["message" => "Article mis à jour"], 201);
     }

@@ -21,6 +21,10 @@ return new class extends Migration
             $table->string("image_path")->nullable(false);
             $table->unsignedBigInteger("user_id")->nullable(false);
             $table->foreign('user_id')->references("id")->on("users")->onDelete("cascade");
+            $table->unsignedBigInteger("loisir_id")->nullable(false);
+            $table->foreign('loisir_id')->references("id")->on("loisirs")->onDelete("cascade");
+            $table->unsignedBigInteger("theme_id")->nullable(false);
+            $table->foreign('theme_id')->references("id")->on("themes")->onDelete("cascade");
             $table->timestamps();
         });
     }

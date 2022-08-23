@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ThemeController;
+use App\Http\Controllers\LoisirController;
 use App\Http\Controllers\ArticlesController;
 
 /*
@@ -29,4 +30,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource("themes", ThemeController::class);
+Route::apiResource("themes", ThemeController::class); 
+Route::apiResource("loisirs", LoisirController::class); 
+
