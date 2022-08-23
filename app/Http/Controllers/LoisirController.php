@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Loisir;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 
 
 class LoisirController extends Controller
@@ -16,8 +17,15 @@ class LoisirController extends Controller
      */
     public function index()
     {
-        $loisirs = Loisir::all();
-        return response()->json($loisirs);
+        $loisirs = DB::table('loisir')
+         ->join('lieux', 'lieux.id', '=', 'loisir.lieu_id')
+         ->get()
+         ->toArray();
+
+        return response()->json([
+            'status' => 'Success',
+            'data' => $loisirs
+        ]);
     }
 /**
      * Store a newly created resource in storage.
@@ -35,6 +43,7 @@ class LoisirController extends Controller
         $loisir = Loisir::create([
             "nom_loisir" => $request->nom_loisir,
             "description_loisir" => $request->description_loisir,
+            "lieu_id" => $request->lieu_id,
         ]);
         return response()->json([
             "status" => "Succes",
@@ -69,6 +78,7 @@ class LoisirController extends Controller
         $loisir->update([
             "nom_loisir" => $request->nom_loisir,
             "description_loisir" => $request->description_loisir,
+            "lieu_id" => $request ->lieu_id,
         ]);
         return response()->json([
             'status' => 'Mise à jour réussi'
